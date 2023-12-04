@@ -1,1 +1,70 @@
-<p>home works!</p>
+<section class="todoapp">
+  <header class="header">
+    <div class="container">
+      <h1>My Day</h1>
+      <p>All my tasks in one place</p>
+      <input
+        class="new-todo"
+        placeholder="Type new todo"
+        autofocus
+        [formControl]="newTaskCtrl"
+        (keydown.enter)="addTask()"
+        type="text"
+      />
+    </div>
+  </header>
+  <div class="container todoapp-wrapper">
+    <!-- <pre>
+      <code>
+        {{taskList() | json}}
+      </code>
+    </pre> -->
+    <!-- This section should be hidden by default and shown when there are todos -->
+    <section class="main">
+      <ul class="todo-list">
+        <li *ngFor="let taskInfo of tasksByFilter();index as id"
+          [class.completed]="taskInfo.checked"
+          [class.editing]="taskInfo.editing"
+          >
+          <div class="view">
+            <input
+              class="toggle"
+              type="checkbox"
+              [checked]="taskInfo.checked"
+              (click)="completeTask(id)"/>
+            <label (dblclick)="editTask(id)">{{ taskInfo.task }}</label>
+            <button class="destroy" (click)="deleteTask(id)"></button>
+          </div>
+          <input
+            class="edit"
+            #editTaskInput
+            [(ngModel)]="taskInfo.task"
+            (blur)="saveTask(id)"
+            (keydown.enter)="saveTask(id)" />
+          <!-- <input class="edit" value="Learn JavaScript" /> -->
+        </li>
+      </ul>
+    </section>
+    <!-- This footer should be hidden by default and shown when there are todos -->
+    <footer class="footer">
+      <!-- This should be `0 items left` by default -->
+      <span class="todo-count">
+        <strong>
+          {{countTasksLeft()}}
+        </strong>
+        {{countTasksLeft() > 1 ? "items" : "item"}}
+        left
+      </span>
+      <!-- Remove this if you don't implement routing -->
+      <ul class="filters">
+        @for (filter of filters; track $index; let count = $count) {
+          <li>
+            <a (click)="changeFilter($index)" [class.selected]="filter.active">{{filter.name}}</a>
+          </li>
+        }
+      </ul>
+      <!-- Hidden if no completed items are left ↓ -->
+      <button class="clear-completed" (click)="deleteCompletedTasks()">Clear completed</button>
+    </footer>
+  </div>
+</section>
